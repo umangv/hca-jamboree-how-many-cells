@@ -28,6 +28,12 @@ B_ncells = 1
 B_cov_rel = 1
 
 args <- commandArgs(trailingOnly = TRUE)
+loom_file <- args[1]
+freq1 <- args[2]
+freq2 <- args[3]
+cluster_1 <- args[4]
+cluster_2 <- args[5]
+outfile <- args[6]
 
 #lf <- connect(filename = args[1])
 data <- h5read(loom_file,name = "/")
@@ -59,17 +65,10 @@ score_sil <- SilScore(seurat.object, cluster.avgs,
 # saturation point
 sat_point <- Int_asym + B_sil_asym * score_sil
 
-
 # dependence on number of cells
 num.cells <- seq(1000, 100000, 1000)
 predicted.separability <- #SOMETHING
   
-out <- cbind(num.cells, predicted.separability)
-write.table(out, args[4])
-
-# Simple prediction based soley on DE genes
-num.cells <- seq(1000, 100000, 1000)
-predicted.separability <- 1 / (1 + exp(-num.cells * num.de.genes / 1e7))
-output <- data.frame(num.cells, predicted.separability)
+output <- cbind(num.cells, predicted.separability)
 colnames(output) <- c("Number of Cells", "Predicted Separability")
-write.table(x = output, file = args[4], sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(x = output, file = outfile, sep = "\t", quote = FALSE, row.names = FALSE)
