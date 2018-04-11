@@ -41,7 +41,7 @@
           <p>Also vary relative frequencies of clusters</p>
         </section>
         <section>
-          <h2>Feature Selection</h2>
+          <h2>Predictive Features</h2>
           <ul style="font-size:15px; float: right;">
             <li>n_cell: Number of cells</li>
             <li>mean_nUMI: mean UMI across cells</li>
@@ -58,6 +58,35 @@
         </section>
         <section>
           <h2>Feature Selection with Boosted Trees</h2>
+          <ul>
+            <li>Advantages of decision tree ensembles
+              <ul>
+                <li>Nonlinear</li>
+                <li>Heterogeneous features at different scales</li>
+              </ul>
+            </li>
+            <li>Feature importances are meaningful
+              <ul>
+                <li>Estimate contribution to mutual information of {joint features} and separability</li>
+                <li>Especially with a good model</li>
+                <li>Boosted trees for lower variance, lower-entropy importances (or RFs)</li>
+              </ul>
+            </li>
+            <li>Forests of trees for gene set selection
+              <ul>
+                <li>To get gene-level features for each pair of clusters (e.g. top DE gene)</li>
+                <li>Run binary classifier on raw counts to tell apart the pair of clusters</li>
+                <li>Output feature importances: fraction of cluster-discriminative interactions that each feature participates in</li>
+              </ul>
+            </li>
+        </section>
+        <section>
+          <h2>Model Performance: Boosted Trees</h2>
+          <img src="images/andrew_pred.png" width="45%"> <img src="images/andrew_actual.png" width="45%">
+        </section>
+        <section>
+          <h2>Model Performance: Boosted Trees</h2>
+          <img src="images/andrew_comparison.png">
         </section>
         <section>
           <h2>Future Directions</h2>
