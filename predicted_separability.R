@@ -53,20 +53,44 @@ seurat.object <- CreateSeuratObject(raw.data = umi.matrix)
 seurat.object <- SetIdent(object = seurat.object,
                           cells.use = seurat.object@cell.names,
                           ident.use = clusters)
-seurat.object <- NormalizeData(seurat.object,display.progress = F,scale.factor = 1e4,normalization.method = "LogNormalize")
-cluster.avgs <- AverageExpression(object = seurat.object, display.progress = FALSE)
+seurat.object <- NormalizeData(seurat.object,
+                               display.progress = F,
+                               scale.factor = 1e4,
+                               normalization.method = "LogNormalize")
 
-#Silhouette Score Function
-score_sil <- SilScore(seurat.object, cluster.avgs,
-                      cluster_comparison = paste(cluster_1, ":", cluster_2),
-                      cluster_ids = seurat.object@ident)
+# Silhouette Score Metric
+SilScore <- function(seurat.object, cluster_1, cluster_2, clusters) {
+  
+  # Compute Cluster Averages
+  avg_cluster <- AverageExpression(seurat.object,return.seurat = T,show.progress = F)
+  
+  # Identify member cells
+  is_compared <- clusters %in% c(cluster_1,cluster_2)
+  
+  # Projective Average Sil Width
+  x <- t(t(avg_cluster@data[,cluster_1,drop = FALSE] -
+           avg_cluster@data[,cluster_2,drop = FALSE]) %*% seurat.object@data[,is_compared])      
+  d <- dist(x)
+  g <- as.numeric(factor(clusters[is_compared]))
+  
+  return(mean(cluster::silhouette(dist = d,x=g)[,"sil_width"]))
+}
 
-# saturation point
-# sat_point <- Int_asym + B_sil_asym * score_sil
+score_sil <- SilScore(seurat.object = seurat.object,
+                      cluster_1 = cluster_1,
+                      cluster_2 = cluster_2,
+                      clusters = clusters)
+logit_score_sil <- boot::logit(score_sil/2 + 1/2)
+
+# Total Cluster Frequency Metric
+frequency_cluster_tot <- log(freq1) + log(freq2)
 
 # dependence on number of cells
 num.cells <- seq(1000, 100000, 1000)
-predicted.separability <- #SOMETHING
+predicted.separability <- boot::inv.logit(B0 +
+                                          B_logit_score_sil*logit_score_sil +
+                                          B_frequency_cluster_tot*frequency_cluster_tot +
+                                          B_log_ncell*log(num.cells))
   
 output <- cbind(num.cells, predicted.separability)
 colnames(output) <- c("Number of Cells", "Predicted Separability")
