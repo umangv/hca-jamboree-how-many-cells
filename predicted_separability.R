@@ -21,13 +21,10 @@ suppressMessages(library(dplyr))
 ################################################################################
 
 # Parameters
-B_freq_tot = 1
-B_freq_rel = 1
-B_sil_curve = 1
-B_sil_asym = 1
-Int_asym = 1
-B_ncells = 1
-B_cov_rel = 1
+B0 = -4.8
+B_logit_score_sil = 2.17
+B_frequency_cluster_tot = 0.51
+B_log_ncell = 0.71
 
 args <- commandArgs(trailingOnly = TRUE)
 loom_file <- args[1]
