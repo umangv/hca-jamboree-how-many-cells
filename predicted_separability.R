@@ -28,10 +28,10 @@ B_log_ncell = 0.71
 
 args <- commandArgs(trailingOnly = TRUE)
 loom_file <- args[1]
-freq1 <- args[2]
-freq2 <- args[3]
-cluster_1 <- args[4]
-cluster_2 <- args[5]
+freq1 <- args[3]
+freq2 <- args[5]
+cluster_1 <- args[2]
+cluster_2 <- args[4]
 outfile <- args[6]
 
 #lf <- connect(filename = args[1])
