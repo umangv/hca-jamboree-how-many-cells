@@ -1,5 +1,5 @@
 /**
- * Black theme for reveal.js. This is the opposite of the 'white' theme.
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
  *
  * By Hakim El Hattab, http://hakim.se
  */
@@ -16,10 +16,10 @@
 
 
 // Override theme settings (see ../template/settings.scss)
-$backgroundColor: #222;
+$backgroundColor: #fff;
 
-$mainColor: #fff;
-$headingColor: #fff;
+$mainColor: #222;
+$headingColor: #222;
 
 $mainFontSize: 40px;
 $mainFont: 'Source Sans Pro', Helvetica, sans-serif;
@@ -28,7 +28,7 @@ $headingTextShadow: none;
 $headingLetterSpacing: normal;
 $headingTextTransform: none;
 $headingFontWeight: 600;
-$linkColor: #42affa;
+$linkColor: #2a76dd;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
@@ -37,9 +37,9 @@ $heading2Size: 1.3em;
 $heading3Size: 1.1em;
 $heading4Size: 1.0em;
 
-section.has-light-background {
+section.has-dark-background {
 	&, h1, h2, h3, h4, h5, h6 {
-		color: #222;
+		color: #fff;
 	}
 }
 
@@ -49,3 +49,4 @@ section.has-light-background {
 // ---------------------------------------------
 
 p { text-align: left;}
+.reveal section img {border: none; box-shadow: none; }
