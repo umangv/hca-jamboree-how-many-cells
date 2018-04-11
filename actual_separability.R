@@ -11,7 +11,8 @@
 
 suppressMessages(library(Seurat))
 suppressMessages(library(RANN))
-suppressMessages(library(loomR))
+#suppressMessages(library(loomR))
+suppressMessages(library(rhdf5))
 
 ################################ Fxn Definitions ###############################
 ProcessData <- function(object) {
@@ -48,14 +49,28 @@ ComputeSeparability <- function(input.data, cells.1, cells.2, k = 20) {
 }
 ################################################################################
 
+
+
 args <- commandArgs(trailingOnly = TRUE)
-lf <- connect(filename = args[1])
+#lf <- connect(filename = args[1])
+
+loom_file <- args[1]
+cluster_1 <- args[2]
+cluster_2 <- args[3]
+
+data <- h5read(loom_file,name = "/")
+data_matrix <- t(data$matrix)
+dimnames(data_matrix) <- list(data$row_attrs$gene_names, data$col_attrs$cell_names)
+clusters <- data$col_attrs$cluster; 
+names(clusters) <- colnames(data_matrix)
+rm(data)
+umi.matrix <- Matrix(data_matrix,sparse=T)
 
 # Get UMI matrix and cluster information from the loom object
-umi.matrix <- t(lf[["matrix"]][,])
-rownames(umi.matrix) <- lf[["row_attrs/gene_names"]][]
-colnames(umi.matrix) <- lf[["col_attrs/cell_names"]][]
-clusters <- lf[["col_attrs/cluster"]][]
+#umi.matrix <- t(lf[["matrix"]][,])
+#rownames(umi.matrix) <- lf[["row_attrs/gene_names"]][]
+#colnames(umi.matrix) <- lf[["col_attrs/cell_names"]][]
+#clusters <- lf[["col_attrs/cluster"]][]
 
 seurat.object <- CreateSeuratObject(raw.data = umi.matrix)
 seurat.object <- NormalizeData(object = seurat.object, display.progress = FALSE)
